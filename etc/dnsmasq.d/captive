@@ -1,0 +1,34 @@
+listen-address=192.168.188.2
+interface=eth0
+bind-interfaces
+#dhcp-range=192.168.12.2,192.168.12.20,255.255.255.0,24h                                                 
+#dhcp-option=121,<network>,<route>,0/0,192.168.12.1
+#dhcp-option=option:router,192.168.12.1
+
+dhcp-range=kid,192.168.188.130,192.168.188.240,255.255.255.0,8h
+dhcp-range=standard,192.168.188.40,192.168.188.60,255.255.255.0,8h
+
+#set alternate route
+dhcp-option=standard,3,192.168.188.1
+dhcp-option=kid,3,192.168.188.2
+dhcp-option=15,"localdomain"
+#set alternate dns server
+dhcp-option=standard,6,8.8.8.8
+dhcp-option=kid,6,192.168.188.2
+
+dhcp-host=c8:0e:14:de:7d:40,set:standard,192.168.1.1,fritz.box,8h                                        
+dhcp-mac=set:standard,b4:9d:0b:6d:59:b8
+
+cname=www.youtube.com,restrict.youtube.com
+cname=m.youtube.com,restrict.youtube.com
+cname=youtubei.googleapis.com,restrict.youtube.com
+cname=youtube.googleapis.com,restrict.youtube.com
+cname=www.youtube-nocookie.com,restrict.youtube.com
+#cname=www.twitch.tv,restrict.youtube.com
+#cname=twitch.tv,restrict.youtube.com
+address=/captive.portal/192.168.188.2
+
+log-facility=/var/log/dnsmasq.log
+log-queries
+server=8.8.8.8
+

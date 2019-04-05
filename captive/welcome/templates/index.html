@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block content %}
+  <div class="container">
+    <div class="row">
+      <div class="one-half column" style="margin-top: 5%">
+        <h3>Hello {{ wiuser.name }}</h3>
+        <h4>you're connceted to pihome</h4>
+        <p>Before requesting access please consider the followings:</p>
+        <ul class="pull">
+            <li>Have you made your bed?</li>
+            <li>Have you done your homework?</li>
+            <li>Have you helped around the household?</li>
+        </ul>
+        <p>you can always try connecting <a href="{{ url }}">again</a></p>
+        {% if emergency_enabled %}
+        <p><small style="font-size: 0.6em">request <a href="emergency?selector={{ wiuser.mac }}&url={{ url }}">emergency access</a> for 3 minutes</p>
+        {% endif %}
+      </div>
+    </div>
+  <small style="font-size: 0.3em">{{ wiuser.ip }} / {{ wiuser.mac }}
+   {% if user.is_authenticated %}
+     / <a href="wifiadmin/">{{ user.get_username }}</a>
+  {% else %}
+     / <a href="/welcome/accounts/login/?next=/welcome/wifiadmin/">login</a>
+  {% endif %}
+  </small>
+  </div>
+{% endblock %}

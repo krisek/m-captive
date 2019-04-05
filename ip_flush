@@ -1,0 +1,6 @@
+#!/bin/bash
+# This script flushes the firewall
+
+/sbin/iptables -F
+/sbin/iptables -F -t nat
+/sbin/iptables -F -t mangle

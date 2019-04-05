@@ -1,0 +1,68 @@
+#!/bin/bash
+
+# This script initaliazes the firewall
+# enables routing and sets up white lists
+
+export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/games:/usr/games
+
+cd "$(dirname "$0")"
+
+echo 1 > /proc/sys/net/ipv4/ip_forward
+iptables -F -t nat; iptables -F -t mangle; iptables -F
+
+WIFI=eth0
+UPLINK=eth0
+
+iptables -t nat -A POSTROUTING -o $UPLINK -j MASQUERADE
+iptables -A FORWARD -i $UPLINK -o $WIFI -m state --state RELATED,ESTABLISHED -j ACCEPT
+iptables -A FORWARD -i $WIFI -o $UPLINK -j ACCEPT
+iptables-restore -c < iptables.save
+
+
+for i in `cat whatsapp_ip2.txt `; do  iptables -t mangle -I internet 1 -m iprange --dst-range $i -j RETURN;  iptables -t mangle -I web 1 -m iprange --dst-range $i -j RETURN; done
+for i in `cat whatsapp_ip.txt `; do iptables -t mangle -I internet 1 -m iprange --dst-range $i -j RETURN;  iptables -t mangle -I web 1 -m iprange --dst-range $i -j RETURN; done
+
+for pattern in stream mp3
+do
+iptables -t mangle -I web 1 -m string --string "$pattern" --algo bm -j RETURN
+iptables -t mangle -I internet 1 -m string --string "$pattern" --algo bm -j RETURN
+done
+
+#skype
+for i in login.skype.com  pipe.skype.com  secure.skype.com  www.skype.com  web.skype.com www.skypeassets.com  clientlogin.cdn.skype.com  mobile.pipe.aria.microsoft.com  login.live.com mms.whatsapp.net mmg.whatsapp.net wdr-kiraka-live.cast.addradio.de discordapp.com eu-central666.discord.gg
+do
+  for skypeip in `dig $i +short | grep -P "^\d"`
+  do
+    skypeip_min=`echo $skypeip | sed 's/[^\.]*$/0/'`
+    echo $skypeip_min
+  done
+done | sort | uniq > /tmp/skylist
+echo 91.190.216.0 >> /tmp/skylist
+echo 91.190.217.0 >> /tmp/skylist
+echo 91.190.218.0 >> /tmp/skylist
+{ rm /tmp/skylist && sort > /tmp/skylist; } < /tmp/skylist
+{ rm /tmp/skylist && uniq > /tmp/skylist; } < /tmp/skylist
+
+for skypeip_min in `cat /tmp/skylist`
+do
+skypeip_max=`echo $skypeip_min | sed 's/[^\.]*$/255/'`
+iptables -t mangle -I internet 1 -m iprange --dst-range $skypeip_min-$skypeip_max -j RETURN
+iptables -t mangle -I web 1 -m iprange --dst-range $skypeip_min-$skypeip_max -j RETURN
+done
+
+#hangouts duo
+iptables -t mangle -I web 1 -m iprange --dst-range 172.217.16.166-172.217.16.166 -j RETURN
+iptables -t mangle -I web 1 -m iprange --dst-range 172.217.16.168-172.217.16.168 -j RETURN
+iptables -t mangle -I web 1 -m iprange --dst-range 172.217.21.202-172.217.21.202 -j RETURN
+iptables -t mangle -I web 1 -m iprange --dst-range 172.217.21.232-172.217.21.232 -j RETURN
+iptables -t mangle -I web 1 -m iprange --dst-range 172.217.21.238-172.217.21.238 -j RETURN
+iptables -t mangle -I web 1 -m iprange --dst-range 172.217.22.66-172.217.22.66 -j RETURN
+
+#discord android app @cloudflare
+#> 104.16.248.144
+#> 104.16.59.5
+#> 104.16.60.37
+iptables -t mangle -I web 1 -m iprange --dst-range 104.16.0.0-104.16.255.255 -j RETURN
+#iptables -t mangle -I web 1 -m iprange --dst-range 104.16.248.0-104.16.248.255 -j RETURN
+
+

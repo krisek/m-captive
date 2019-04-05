@@ -1,0 +1,36 @@
+
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+ <div class="container">
+    <div class="row">
+      <div class="eight column" style="margin-top: 5%">
+
+Hello {{ user.get_username }} --- users on duna:<br/>
+
+    {% for mac, user in wiusers.items %}
+        <span>{{user.name}}{% if user.name|lower != user.hostname|lower %}&nbsp;({{user.hostname}}){% endif %}&nbsp;
+        <!-- <td>{{mac}}</td>
+        <td>{{user.ip}}</td>
+
+        <td>{{user.hostname}}</td>
+        <td>{{user.timestamp}}</td> !-->
+        {% if  user.chains.items %}
+             {% for chain, enabled in user.chains.items %}
+         {{ chain }}&nbsp;
+         {% endfor %}
+       <a href=disable?selector={{mac}} style="text-decoration: none;"><span style="font-size: 1.5em;">📵</span></a>
+        {% else %}
+          <a href=enable?selector={{mac}} style="text-decoration: none;"><span style="font-size: 1.5em; ">📱</span></a>
+         {% endif %}
+
+    </span><br/>
+    {% endfor %}
+
+</table>
+</div>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,15 @@
+{
+  "display": "minimal-ui",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "images/favicon.png",
+      "sizes": "300x300",
+      "type": "image/png"
+    }
+  ],
+  "name": "Captive",
+  "scope": "/welcome/",
+  "short_name": "Captive",
+  "start_url": "/welcome/wifiadmin/admin.html"
+}
