@@ -15,14 +15,14 @@ TODO: turn everything from here to an Ansible playbook
 # Software installation
 
 ## Packages
-    `apt install dnsmasq python-virtualenv dnsutils nginx net-tools fish git conntrack`
+    > apt install dnsmasq python-virtualenv dnsutils nginx net-tools fish git conntrack
 
 ## Pi-captive
-    `git clone https://github.com/kris/m-captive`
+    > git clone https://github.com/kris/m-captive
 
 # Captive portal customization
 
-    `cd m-captive`
+    > cd m-captive
 
 Files to customize/edit/cp:
 
@@ -36,9 +36,9 @@ Files to customize/edit/cp:
    > ...
    > cd ..
 
-1. customize DHCP/DNS configuration: 
+4. customize DHCP/DNS configuration: 
 
-    `sudo cp etc/dnsmasq.d/captive /etc/dnsmasq.d/captive`
+    > sudo cp etc/dnsmasq.d/captive /etc/dnsmasq.d/captive
 
 update $own_ip & fine tune (add known mac addresses accordingly)
 
@@ -47,14 +47,14 @@ update the captive.portal address and uplink DNS
    > address=/captive.portal/$own_ip
    > server=8.8.8.8 #optional
 
-1. customize NGINX configuration
+5. customize NGINX configuration
 
-    `sudo cp etc/nginx/sites-available/default  /etc/nginx/sites-available/default`
+    > sudo cp etc/nginx/sites-available/default  /etc/nginx/sites-available/default
 
 update hotspot users as per DHCP configuration    
     
-1. update captive/welcome/views.py with know devices
-1. captive/captive/settings.py: remove * from ALLOWED_HOSTS if everything works fine
+6. update captive/welcome/views.py with know devices
+7. captive/captive/settings.py: remove * from ALLOWED_HOSTS if everything works fine
 
 # Application startup
 
