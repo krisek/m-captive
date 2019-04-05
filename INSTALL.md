@@ -63,3 +63,24 @@ update hotspot users as per DHCP configuration
 1. Initialise the firewall: `sudo ./ip_init`
 1. Start the captive portal application: `cd captive; nohup bash ./startup.sh`
 
+# Misc
+
+The user running the captive portal should be able to run 
+
+        sudo iptables
+        
+   and
+   
+        sudo conntrack
+        
+ without entering password.
+ 
+ This can be achieved by adding the 
+ 
+        pi ALL=NOPASSWD: /sbin/iptables , /usr/sbin/conntrack
+        
+line to `/etc/sudoers`  where you replace `pi` with the actual username of the use running the portal.
+
+
+ 
+
